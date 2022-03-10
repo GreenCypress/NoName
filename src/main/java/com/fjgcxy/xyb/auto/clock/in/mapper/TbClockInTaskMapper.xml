@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fjgcxy.xyb.auto.clock.in.mapper.TbClockInTaskMapper">
+    <resultMap id="BaseResultMap" type="com.fjgcxy.xyb.auto.clock.in.model.entity.TbClockInTask">
+        <!--@mbg.generated-->
+        <!--@Table tb_clock_in_task-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="xyb_account_id" jdbcType="INTEGER" property="xybAccountId"/>
+        <result column="lat" jdbcType="VARCHAR" property="lat"/>
+        <result column="lon" jdbcType="VARCHAR" property="lon"/>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="trainee_id" jdbcType="VARCHAR" property="traineeId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="clock_in_time_cron" jdbcType="VARCHAR" property="clockInTimeCron"/>
+        <result column="clock_in_date" jdbcType="VARCHAR" property="clockInDate"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, user_id, xyb_account_id, lat, lon, device_name, trainee_id, address, clock_in_time_cron,
+        clock_in_date, `state`, create_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from tb_clock_in_task
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from tb_clock_in_task
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.fjgcxy.xyb.auto.clock.in.model.entity.TbClockInTask" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tb_clock_in_task (user_id, xyb_account_id, lat,
+                                      lon, device_name, trainee_id,
+                                      address, clock_in_time_cron, clock_in_date,
+                                      `state`, create_time)
+        values (#{userId,jdbcType=INTEGER}, #{xybAccountId,jdbcType=INTEGER}, #{lat,jdbcType=VARCHAR},
+                #{lon,jdbcType=VARCHAR}, #{deviceName,jdbcType=VARCHAR}, #{traineeId,jdbcType=VARCHAR},
+                #{address,jdbcType=VARCHAR}, #{clockInTimeCron,jdbcType=VARCHAR}, #{clockInDate,jdbcType=VARCHAR},
+                #{state,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.fjgcxy.xyb.auto.clock.in.model.entity.TbClockInTask" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into tb_clock_in_task
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="xybAccountId != null">
+                xyb_account_id,
+            </if>
+            <if test="lat != null">
+                lat,
+            </if>
+            <if test="lon != null">
+                lon,
+            </if>
+            <if test="deviceName != null">
+                device_name,
+            </if>
+            <if test="traineeId != null">
+                trainee_id,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="clockInTimeCron != null">
+                clock_in_time_cron,
+            </if>
+            <if test="clockInDate != null">
+                clock_in_date,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="xybAccountId != null">
+                #{xybAccountId,jdbcType=INTEGER},
+            </if>
+            <if test="lat != null">
+                #{lat,jdbcType=VARCHAR},
+            </if>
+            <if test="lon != null">
+                #{lon,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceName != null">
+                #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="traineeId != null">
+                #{traineeId,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="clockInTimeCron != null">
+                #{clockInTimeCron,jdbcType=VARCHAR},
+            </if>
+            <if test="clockInDate != null">
+                #{clockInDate,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.fjgcxy.xyb.auto.clock.in.model.entity.TbClockInTask">
+        <!--@mbg.generated-->
+        update tb_clock_in_task
+        <set>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="xybAccountId != null">
+                xyb_account_id = #{xybAccountId,jdbcType=INTEGER},
+            </if>
+            <if test="lat != null">
+                lat = #{lat,jdbcType=VARCHAR},
+            </if>
+            <if test="lon != null">
+                lon = #{lon,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceName != null">
+                device_name = #{deviceName,jdbcType=VARCHAR},
+            </if>
+            <if test="traineeId != null">
+                trainee_id = #{traineeId,jdbcType=VARCHAR},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="clockInTimeCron != null">
+                clock_in_time_cron = #{clockInTimeCron,jdbcType=VARCHAR},
+            </if>
+            <if test="clockInDate != null">
+                clock_in_date = #{clockInDate,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                `state` = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.fjgcxy.xyb.auto.clock.in.model.entity.TbClockInTask">
+        <!--@mbg.generated-->
+        update tb_clock_in_task
+        set user_id            = #{userId,jdbcType=INTEGER},
+            xyb_account_id     = #{xybAccountId,jdbcType=INTEGER},
+            lat                = #{lat,jdbcType=VARCHAR},
+            lon                = #{lon,jdbcType=VARCHAR},
+            device_name        = #{deviceName,jdbcType=VARCHAR},
+            trainee_id         = #{traineeId,jdbcType=VARCHAR},
+            address            = #{address,jdbcType=VARCHAR},
+            clock_in_time_cron = #{clockInTimeCron,jdbcType=VARCHAR},
+            clock_in_date      = #{clockInDate,jdbcType=VARCHAR},
+            `state`            = #{state,jdbcType=INTEGER},
+            create_time        = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2022-03-09-->
+    <select id="selectOneByXybAccountId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_clock_in_task
+        where xyb_account_id = #{xybAccountId,jdbcType=INTEGER}
+    </select>
+
+    <!--auto generated by MybatisCodeHelper on 2022-03-09-->
+    <select id="selectByState" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_clock_in_task
+        where `state` = #{state,jdbcType=INTEGER}
+    </select>
+
+<!--auto generated by MybatisCodeHelper on 2022-03-10-->
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_clock_in_task
+        where user_id=#{userId,jdbcType=INTEGER}
+    </select>
+</mapper>

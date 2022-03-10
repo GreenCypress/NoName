@@ -1,0 +1,38 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: Xyb-Auto-Clock-In
+  mail:
+    host: smtp.163.com
+    username: 13124089198@163.com
+    password: VTGZMZUGGMKTJTYH
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/xyb?serverTimezone=Asia/Shanghai
+    username: root
+    password: 86b83748f8ef1af7
+    druid:
+      max-wait: 60000
+      initialSize: 5
+      maxActive: 20
+      validation-query: "SELECT 1 FROM DUAL"
+      max-pool-prepared-statement-per-connection-size: 111
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 100000
+  redis:
+    host: 192.168.1.200
+    database: 10
+    password: xyb123456...
