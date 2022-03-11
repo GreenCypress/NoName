@@ -39,7 +39,7 @@ public class ClockInRunnable implements Runnable {
         TbUser tbUser = tbUserMapper.selectByPrimaryKey(tbClockInTask.getUserId());
 
         // 打卡签到
-        VoXybLogin sessionId = xybAccountLoginManager.getSessionId(tbClockInTask.getXybAccountId(), false);
+        VoXybLogin sessionId = xybAccountLoginManager.getSessionId(tbClockInTask.getXybAccountId(), true);
         try {
             xybApi.clockInNew(sessionId.getData().getSessionId(), tbClockInTask);
             saveRecord(1);
