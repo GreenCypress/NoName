@@ -2,18 +2,22 @@ package com.fjgcxy.xyb.auto.clock.in.controller;
 
 import com.fjgcxy.xyb.auto.clock.in.auth.anno.AuthLogin;
 import com.fjgcxy.xyb.auto.clock.in.exception.XybNoAuthException;
+import com.fjgcxy.xyb.auto.clock.in.mapper.TbClockInTaskMapper;
 import com.fjgcxy.xyb.auto.clock.in.model.dto.DtoAutoClockInXyb;
+import com.fjgcxy.xyb.auto.clock.in.model.entity.TbClockInTask;
 import com.fjgcxy.xyb.auto.clock.in.model.vo.BaseResponse;
 import com.fjgcxy.xyb.auto.clock.in.model.vo.VoAutoClockInTask;
+import com.fjgcxy.xyb.auto.clock.in.model.vo.VoXybLogin;
 import com.fjgcxy.xyb.auto.clock.in.service.IServiceAutoClockInTask;
 import com.fjgcxy.xyb.auto.clock.in.utils.TokenUtils;
+import com.fjgcxy.xyb.auto.clock.in.utils.XybAccountLoginManager;
+import com.fjgcxy.xyb.auto.clock.in.utils.XybApi;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-import org.w3c.dom.html.HTMLParagraphElement;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -23,10 +27,16 @@ import java.util.List;
 @RestController
 public class ControllerAutoClockInTask {
 
+    private final XybApi xybApi;
+    private final XybAccountLoginManager xybAccountLoginManager;
     private final IServiceAutoClockInTask serviceAutoClockInTask;
+    private final TbClockInTaskMapper tbClockInTaskMapper;
 
-    public ControllerAutoClockInTask(IServiceAutoClockInTask serviceAutoClockInTask) {
+    public ControllerAutoClockInTask(XybApi xybApi, XybAccountLoginManager xybAccountLoginManager, IServiceAutoClockInTask serviceAutoClockInTask, TbClockInTaskMapper tbClockInTaskMapper) {
+        this.xybApi = xybApi;
+        this.xybAccountLoginManager = xybAccountLoginManager;
         this.serviceAutoClockInTask = serviceAutoClockInTask;
+        this.tbClockInTaskMapper = tbClockInTaskMapper;
     }
 
     /**
@@ -114,6 +124,19 @@ public class ControllerAutoClockInTask {
     @DeleteMapping("/auto-clock-in/xyb/delete/{taskId}")
     public BaseResponse<Void> deleteAutoClockInXyb(HttpServletRequest request, @PathVariable Integer taskId) {
         serviceAutoClockInTask.deleteTask(TokenUtils.getUserId(request), taskId);
+        return BaseResponse.ok();
+    }
+
+    @AuthLogin
+    @ApiOperation("立即签到")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "登录Token", paramType = "header", dataTypeClass = String.class)
+    })
+    @DeleteMapping("/auto-clock-in/now/{taskId}")
+    public BaseResponse<Void> now(HttpServletRequest request, @PathVariable Integer taskId) throws XybNoAuthException {
+        TbClockInTask tbClockInTask = tbClockInTaskMapper.selectByPrimaryKey(taskId);
+        VoXybLogin sessionId = xybAccountLoginManager.getSessionId(tbClockInTask.getXybAccountId(), true);
+        xybApi.clockInNew(sessionId.getData().getSessionId(), tbClockInTask);
         return BaseResponse.ok();
     }
 

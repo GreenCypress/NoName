@@ -37,7 +37,6 @@ public class ClockInRunnable implements Runnable {
     @Override
     public void run() {
         TbUser tbUser = tbUserMapper.selectByPrimaryKey(tbClockInTask.getUserId());
-
         // 打卡签到
         VoXybLogin sessionId = xybAccountLoginManager.getSessionId(tbClockInTask.getXybAccountId(), true);
         try {
@@ -47,7 +46,6 @@ public class ClockInRunnable implements Runnable {
                 serviceMail.send(new DtoMail(tbUser.getEmail(), "[校友邦自动签到平台]签到成功", "签到成功，签到时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())));
             }
         } catch (XybNoAuthException e) {
-//                               throw new BaseException("校友邦重新登录失败.");
             saveRecord(0);
             if (tbUser != null) {
                 serviceMail.send(new DtoMail(tbUser.getEmail(), "[校友邦自动签到平台]签到失败通知", "签到失败!!! 请前往平台重新登录，签到时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date())));

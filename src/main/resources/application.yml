@@ -5,12 +5,15 @@ spring:
     name: Xyb-Auto-Clock-In
   mail:
     host: smtp.163.com
+    port: 465
     username: 13124089198@163.com
     password: VTGZMZUGGMKTJTYH
     default-encoding: utf-8
     properties:
       mail:
         smtp:
+          ssl:
+            enable: true
           auth: true
           starttls:
             enable: true
@@ -33,5 +36,5 @@ spring:
       # 配置一个连接在池中最小生存的时间，单位是毫秒
       min-evictable-idle-time-millis: 100000
   redis:
-    host: 192.168.1.200
+    host: localhost
     database: 10

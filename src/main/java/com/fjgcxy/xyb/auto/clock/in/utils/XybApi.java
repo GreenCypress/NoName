@@ -15,6 +15,7 @@ import org.springframework.util.DigestUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 /**
  * 校友邦 API
@@ -102,25 +103,54 @@ public class XybApi {
     }
 
     public VoXybClockInNew clockInNew(String jsessionid, TbClockInTask dtoAutoClockInXyb) throws XybNoAuthException {
-        FormBody formBody = new FormBody.Builder()
-                .add("traineeId", dtoAutoClockInXyb.getTraineeId())
-                .add("adcode", "null")
-                .add("lat", dtoAutoClockInXyb.getLat())
-                .add("lng", dtoAutoClockInXyb.getLon())
-                .add("address", dtoAutoClockInXyb.getAddress())
-                .add("deviceName", dtoAutoClockInXyb.getDeviceName())
-                .add("punchInStatus", "1")
-                .add("clockStatus", "2")
-                .add("imgUrl", "")
-                .add("reason", "")
-                .build();
+        // 获取mstv
+        // {
+        //    "code": "200",
+        //    "data": {
+        //        "ip": "120.41.225.195"
+        //    },
+        //    "msg": "success",
+        //    "mstv": {
+        //        "t": 1649313825,
+        //        "m": "f6d5168d8fa59b3d7a9447eefc7570b1",
+        //        "s": "57_21_52_7_19_3_49_14_11_47_61_20_40_49_28_25_36_12_20_47"
+        //    }
+        //}
 
-        Request request = new Request.Builder()
-                .url(API_URL_CLOCK_IN_NEW)
-                .addHeader("Cookie", String.format("JSESSIONID=%s", jsessionid))
-                .post(formBody)
-                .build();
+
         try {
+            Response execute1 = okHttpClient.newCall(new Request.Builder().get().url("https://xcx.xybsyw.com/behavior/Duration!getIp.action").build()).execute();
+            VoMstv voMstv = OBJECT_MAPPER.readValue(execute1.body().bytes(), VoMstv.class);
+
+
+            FormBody formBody = new FormBody.Builder()
+                    .add("traineeId", dtoAutoClockInXyb.getTraineeId())
+                    .add("adcode", "350206")
+                    .add("lat", dtoAutoClockInXyb.getLat())
+                    .add("lng", dtoAutoClockInXyb.getLon())
+                    .add("address", dtoAutoClockInXyb.getAddress())
+                    .add("deviceName", dtoAutoClockInXyb.getDeviceName())
+                    .add("punchInStatus", "0")
+                    .add("clockStatus", "2")
+                    .add("imgUrl", "")
+                    .add("reason", "")
+                    .build();
+            log.info(dtoAutoClockInXyb.getTraineeId());
+            Request request = new Request.Builder()
+                    .url(API_URL_CLOCK_IN_NEW)
+                    .addHeader("Cookie", String.format("JSESSIONID=%s", jsessionid))
+                    .addHeader("Referer", "https://servicewechat.com/wx9f1c2e0bbc10673c/224/page-frame.html")
+                    .addHeader("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E217 MicroMessenger/6.8.0(0x16080000) NetType/WIFI Language/en Branch/Br_trunk MiniProgramEnv/Mac")
+                    .addHeader("n", "content,deviceName,keyWord,blogBody,blogTitle,getType,responsibilities,street,text,reason,searchvalue,key,answers,leaveReason,personRemark,selfAppraisal,imgUrl,wxname,deviceId,avatarTempPath,file,file,model,brand,system,deviceId,platform")
+                    .addHeader("v", "1.7.14")
+                    .addHeader("t", String.valueOf(new Date().getTime() / 1000))
+                    .addHeader("s", voMstv.getMstv().getS())
+                    .addHeader("m", voMstv.getMstv().getM())
+                    .post(formBody)
+                    .build();
+
+            log.info(voMstv.toString());
+
             Response execute = okHttpClient.newCall(request).execute();
             ResponseBody body = execute.body();
             if (body == null) {
@@ -135,9 +165,13 @@ public class XybApi {
                 throw new BaseException(voXybClockInNew.getMsg());
             }
             return voXybClockInNew;
+
         } catch (IOException e) {
+            e.printStackTrace();
             throw new BaseException("请求失败.");
         }
+
+
     }
 
     public VoXybGetPlan getPlan(String planId, String jsessionid) throws XybNoAuthException {
